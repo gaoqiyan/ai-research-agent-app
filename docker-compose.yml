@@ -1,0 +1,26 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: ai-research-mongo
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    environment:
+      MONGO_INITDB_DATABASE: ai_research
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  # 初始化 replica set（Prisma + MongoDB 必需）
+  mongo-init:
+    image: mongo:7
+    depends_on:
+      - mongodb
+    restart: "no"
+    entrypoint: >
+      mongosh --host mongodb:27017 --eval '
+        try { rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] }) }
+        catch(e) { if (e.codeName !== "AlreadyInitialized") throw e }
+      '
+
+volumes:
+  mongodata:

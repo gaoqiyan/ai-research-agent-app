@@ -1,4 +1,4 @@
-# 多项目 AI 研究助手集合
+# 多项目 AI集合
 
 > 企业级多项目 Docker 部署架构（方案 C）  
 > 支持本地单项目开发 + 线上多项目生产部署
@@ -17,7 +17,7 @@
 │       ├── ssl/                    # SSL 证书存储
 │       └── logs/                   # 日志目录
 │
-├── ai-research-app/               # 项目 1（完整应用）
+├── ai-research-app/               # 项目 1（完整应用）AI 研究助手
 │   ├── app/                        # Next.js App Router
 │   ├── lib/research/               # AI 研究逻辑
 │   ├── components/, types/, utils/ # 共享组件

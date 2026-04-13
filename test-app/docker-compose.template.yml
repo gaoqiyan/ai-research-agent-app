@@ -1,0 +1,69 @@
+# ============================================================================
+# docker-compose.yml - AI Research App 2 - 从 ai-research-app 复制后修改
+# ============================================================================
+# 
+# 使用方式：
+# 1. 从 ai-research-app/docker-compose.yml 复制此文件
+# 2. 根据需要修改环境变量（PROJECT_NAME, APP_PORT 等）
+# 3. 运行 docker compose up -d --build
+#
+# 现在这只是一个引用注释，实际使用时需要：
+#
+# 从 ai-research-app 复制完整的 docker-compose.yml，然后修改：
+# - services.app.container_name: app-test-app
+# - services.app.ports: - "3002:3000"
+# - services.mongodb.container_name: mongodb-test-app
+# - volumes: mongo-test-app
+#
+# 或直接使用以下命令：
+# cp ../ai-research-app/docker-compose.yml .
+# # 然后编辑 .env 中的 PROJECT_NAME 和 APP_PORT
+#
+# ============================================================================
+
+# version: '3.8'
+# services:
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: app-${PROJECT_NAME:-test-app}
+#     restart: unless-stopped
+#     ports:
+#       - "${APP_PORT:-3002}:3000"
+#     environment:
+#       NODE_ENV: production
+#       DATABASE_URL: ${DATABASE_URL}
+#       AUTH_SECRET: ${AUTH_SECRET}
+#       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+#       SERPER_API_KEY: ${SERPER_API_KEY}
+#     depends_on:
+#       mongodb:
+#         condition: service_healthy
+#     networks:
+#       - shared-network
+#
+#   mongodb:
+#     image: mongo:7.0
+#     container_name: mongodb-${PROJECT_NAME:-test-app}
+#     restart: unless-stopped
+#     command:
+#       - "--replSet"
+#       - "rs0"
+#       - "--bind_ip_all"
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
+#       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+#     volumes:
+#       - mongo-${PROJECT_NAME:-test-app}:/data/db
+#     networks:
+#       - shared-network
+#
+# networks:
+#   shared-network:
+#     name: shared-network
+#     driver: bridge
+#     external: false
+#
+# volumes:
+#   mongo-${PROJECT_NAME:-test-app}:

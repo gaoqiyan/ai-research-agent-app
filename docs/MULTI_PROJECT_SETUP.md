@@ -7,7 +7,7 @@
 ## 📋 项目结构总览
 
 ```
-/Users/gaoqiyan/Desktop/personal/project/ai-test/ai-research-agent-app/
+/Users/gaoqiyan/Desktop/personal/project/ai-test/ai-collection-project/
 ├── 📁 ai-research-app/              ← 第一个应用项目（核心）
 │   ├── Dockerfile                    ✅ 多阶段构建
 │   ├── docker-compose.yml            ✅ 独立编排

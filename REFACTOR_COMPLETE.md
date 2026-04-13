@@ -64,7 +64,7 @@
 ## 🏗️ 最终项目结构
 
 ```
-/projects (当前：ai-research-agent-app)
+/projects (当前：ai-collection-project)
 ├── shared/
 │   └── nginx/
 │       ├── docker-compose.yml   ✅

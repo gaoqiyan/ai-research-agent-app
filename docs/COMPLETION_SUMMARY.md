@@ -4,7 +4,7 @@
 
 ```
 原始需求:
-"按照方案A修改这个项目结构，当前ai-research-agent-app作为projects，
+"按照方案A修改这个项目结构，当前ai-collection-project作为projects，
 存在，将当前项目变为其中一个子项目，并配置nginx"
 
 ✅ 完成状态: 全部完成
@@ -74,7 +74,7 @@
 
 ```
 最终结构:
-/ai-research-agent-app/
+/ai-collection-project/
 ├── ai-research-app/        ← 第一个完整应用实例
 │   ├── Dockerfile           ✅ 新建
 │   ├── docker-compose.yml   ✅ 新建
@@ -94,7 +94,7 @@
 │
 └── docs/                    ← 文档
 
-✅ 符合要求: 当前 ai-research-agent-app 现已组织为项目集合
+✅ 符合要求: 当前 ai-collection-project 现已组织为项目集合
 ✅ 符合要求: ai-research-app 是第一个子项目
 ✅ 符合要求: Nginx 已配置用于多项目路由
 ```
@@ -366,7 +366,7 @@ curl http://localhost
 git add -A
 git commit -m "refactor: implement Scheme A multi-project architecture
 
-- Reorganize ai-research-agent-app as projects root
+- Reorganize ai-collection-project as projects root
 - Create ai-research-app as primary application
 - Add shared Nginx infrastructure (shared/nginx)
 - Create test-app as template for expansion
@@ -384,7 +384,7 @@ git push origin main
 
 ```bash
 # 备份完整项目结构
-tar -czf ai-research-agent-app-scheme-a-backup-$(date +%Y%m%d).tar.gz \
+tar -czf ai-collection-project-scheme-a-backup-$(date +%Y%m%d).tar.gz \
   ai-research-app/ test-app/ shared/ docs/ *.md
 
 # 备份敏感信息 (不上传 Git!)

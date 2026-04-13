@@ -26,7 +26,7 @@
 ## 三、重构前结构
 
 ```
-ai-research-agent-app/
+ai-collection-project/
 ├── app/
 │   ├── layout.tsx
 │   ├── page.tsx
@@ -69,7 +69,7 @@ ai-research-agent-app/
 ## 四、重构后结构
 
 ```
-ai-research-agent-app/
+ai-collection-project/
 ├── app/                          ✅ 仅保留路由文件
 │   ├── layout.tsx
 │   ├── page.tsx

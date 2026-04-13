@@ -1,23 +1,16 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 import { NextRequest } from "next/server";
-
-const DEFAULT_USER_ID = "default_user";
-
-// 确保默认用户存在
-async function ensureDefaultUser() {
-  await prisma.user.upsert({
-    where: { userId: DEFAULT_USER_ID },
-    update: {},
-    create: { userId: DEFAULT_USER_ID, name: "默认用户" },
-  });
-}
 
 // GET /api/conversations — 获取对话列表（含 messages）
 export async function GET() {
-  await ensureDefaultUser();
+  const session = await auth();
+  if (!session?.user?.userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const conversations = await prisma.conversation.findMany({
-    where: { userId: DEFAULT_USER_ID },
+    where: { userId: session.user.userId },
     include: { messages: { orderBy: { createdAt: "asc" } } },
     orderBy: { createdAt: "desc" },
   });
@@ -42,7 +35,10 @@ export async function GET() {
 
 // POST /api/conversations — 新建对话
 export async function POST(req: NextRequest) {
-  await ensureDefaultUser();
+  const session = await auth();
+  if (!session?.user?.userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const body = await req.json();
   const { id, status, createdAt } = body;
@@ -50,7 +46,7 @@ export async function POST(req: NextRequest) {
   await prisma.conversation.create({
     data: {
       convId: id,
-      userId: DEFAULT_USER_ID,
+      userId: session.user.userId,
       status: status || "idle",
       createdAt: new Date(createdAt),
     },

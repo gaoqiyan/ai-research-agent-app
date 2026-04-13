@@ -1,10 +1,16 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
 import { NextRequest } from "next/server";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
 // GET /api/conversations/:id — 获取单个对话
 export async function GET(_req: NextRequest, { params }: RouteParams) {
+  const session = await auth();
+  if (!session?.user?.userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
 
   const conv = await prisma.conversation.findUnique({
@@ -34,6 +40,11 @@ export async function GET(_req: NextRequest, { params }: RouteParams) {
 
 // PUT /api/conversations/:id — 更新对话（status + 全量 messages 替换）
 export async function PUT(req: NextRequest, { params }: RouteParams) {
+  const session = await auth();
+  if (!session?.user?.userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
   const body = await req.json();
   const { status, messages } = body;
@@ -70,6 +81,11 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
 // DELETE /api/conversations/:id — 删除对话及其 messages
 export async function DELETE(_req: NextRequest, { params }: RouteParams) {
+  const session = await auth();
+  if (!session?.user?.userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
 
   // 先删 messages，再删 conversation（MongoDB 无 CASCADE）

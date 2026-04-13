@@ -1,6 +1,6 @@
 "use client";
 
-import { TimelineItem } from "@/app/types/conversation";
+import { TimelineItem } from "@/types/conversation";
 
 function SkeletonLine() {
   return <div className="h-4 w-40 bg-gray-200 rounded animate-pulse" />;

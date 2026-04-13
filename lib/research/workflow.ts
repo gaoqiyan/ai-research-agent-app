@@ -1,8 +1,8 @@
 // 核心workflow
 import { planTask } from "./planner";
-import { runResearchAgent } from "./runResearchAgent";
-import { summarizeInfo } from "./summarizeInfo";
-import { extractMemories } from "./extractMemories";
+import { runResearchAgent } from "./agent";
+import { summarizeInfo } from "./summarize";
+import { extractMemories } from "./memories";
 
 export async function runWorkflow(input: string) {
   console.log("🧠 拆解任务...");

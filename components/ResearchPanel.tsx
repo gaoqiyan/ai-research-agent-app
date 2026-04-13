@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import Timeline from "./Timeline";
-import { Conversation, Message, TimelineItem } from "@/app/types/conversation";
-import { fetchConversation, updateConversation } from "@/app/utils/api";
+import Timeline from "@/components/Timeline";
+import { Conversation, Message, TimelineItem } from "@/types/conversation";
+import { fetchConversation, updateConversation } from "@/utils/api";
 
 export default function ResearchPanel({
   conversationId,

@@ -1,6 +1,6 @@
 "use client";
 
-import { Conversation } from "@/app/types/conversation";
+import { Conversation } from "@/types/conversation";
 
 function formatTime(timestamp: number): string {
   const now = Date.now();

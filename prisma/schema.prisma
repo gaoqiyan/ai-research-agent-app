@@ -8,11 +8,15 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String         @unique
-  name          String?
-  createdAt     DateTime       @default(now())
-  conversations Conversation[]
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String         @unique
+  name             String?
+  email            String         @unique
+  password         String
+  securityQuestion String         @map("security_question")
+  securityAnswer   String         @map("security_answer")
+  createdAt        DateTime       @default(now())
+  conversations    Conversation[]
 }
 
 model Conversation {

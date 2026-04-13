@@ -1,7 +1,8 @@
 "use client";
 
-import { Conversation } from "@/app/types/conversation";
-import ConversationItem from "./ConversationItem";
+import { Conversation } from "@/types/conversation";
+import { signOut, useSession } from "next-auth/react";
+import ConversationItem from "@/components/ConversationItem";
 
 export default function Sidebar({
   conversations,
@@ -16,6 +17,8 @@ export default function Sidebar({
   onNewConversation: () => void;
   onDelete: (id: string) => void;
 }) {
+  const { data: session } = useSession();
+
   return (
     <aside className="w-64 h-screen flex flex-col border-r border-gray-200 bg-white flex-shrink-0">
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
@@ -49,6 +52,20 @@ export default function Sidebar({
             onDelete={() => onDelete(conv.id)}
           />
         ))}
+      </div>
+
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-600 truncate max-w-[140px]">
+            {session?.user?.name || session?.user?.email}
+          </span>
+          <button
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="text-sm text-gray-400 hover:text-red-500 transition-colors"
+          >
+            退出
+          </button>
+        </div>
       </div>
     </aside>
   );

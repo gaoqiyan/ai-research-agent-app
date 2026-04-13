@@ -1,4 +1,4 @@
-import { MemoryItem } from "@/app/types/conversation";
+import { MemoryItem } from "@/types/conversation";
 
 const MEMORY_KEY = "ai_memories";
 

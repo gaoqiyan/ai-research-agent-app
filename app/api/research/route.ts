@@ -1,6 +1,12 @@
-import { runWorkflowStream } from "@/lib/workflow";
+import { runWorkflowStream } from "@/lib/research/workflow";
+import { auth } from "@/auth";
 
 export async function POST(req: Request) {
+  const session = await auth();
+  if (!session?.user?.userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { query, history } = await req.json();
 
   const stream = new ReadableStream({

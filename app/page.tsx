@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar";
-import ResearchPanel from "./components/ResearchPanel";
-import EmptyState from "./components/EmptyState";
-import { Conversation } from "@/app/types/conversation";
+import Sidebar from "@/components/Sidebar";
+import ResearchPanel from "@/components/ResearchPanel";
+import EmptyState from "@/components/EmptyState";
+import { Conversation } from "@/types/conversation";
 import {
   fetchConversations,
   createConversation,
   removeConversation,
-} from "@/app/utils/api";
+} from "@/utils/api";
 
 export default function Home() {
   const [conversations, setConversations] = useState<Conversation[]>([]);

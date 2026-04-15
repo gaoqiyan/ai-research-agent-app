@@ -32,6 +32,8 @@ services:
     depends_on:
       - mongodb
     restart: "no"
+    networks:
+      - webnet
     entrypoint: >
       mongosh --host mongodb:27017 --eval '\
         try { rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "mongodb:27017" }] }) }\

@@ -38,6 +38,12 @@ APP_TAG=${APP_TAG:-latest}
 read -p "请输入 NEXTAUTH_URL (默认: https://your.domain): " NEXTAUTH_URL
 NEXTAUTH_URL=${NEXTAUTH_URL:-https://your.domain}
 
+read -p "请输入 DEEPSEEK_API_KEY: " DEEPSEEK_API_KEY
+DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+
+read -p "请输入 SERPER_API_KEY: " SERPER_API_KEY
+SERPER_API_KEY=${SERPER_API_KEY:-}
+
 # URL-encode password for DATABASE_URL
 if command -v python3 >/dev/null 2>&1; then
   ENC_PWD=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))" "$MONGO_PWD")
@@ -61,6 +67,9 @@ DATABASE_URL="mongodb://${MONGO_USER}:${ENC_PWD}@mongodb:27017/ai_research?authS
 
 AUTH_SECRET=$AUTH_SECRET
 NEXTAUTH_URL=$NEXTAUTH_URL
+
+DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY
+SERPER_API_KEY=$SERPER_API_KEY
 
 NEXT_PUBLIC_EXAMPLE_KEY=
 EOF

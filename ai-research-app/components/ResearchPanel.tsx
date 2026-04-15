@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import Timeline from "@/components/Timeline";
 import { Conversation, Message, TimelineItem } from "@/types/conversation";
 import { fetchConversation, updateConversation } from "@/utils/api";
+import { generateId } from "@/utils/id";
 
 export default function ResearchPanel({
   conversationId,
@@ -108,7 +109,7 @@ export default function ResearchPanel({
 
     // Create user message
     const userMsg: Message = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       role: "user",
       content: queryText,
       createdAt: Date.now(),
@@ -116,7 +117,7 @@ export default function ResearchPanel({
 
     // Create empty assistant message
     const assistantMsg: Message = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       role: "assistant",
       content: "",
       timeline: [],

@@ -1,11 +1,9 @@
-version: "3.8"
-
 services:
   app:
     image: ${IMAGE:-myorg/ai-research-app}:${APP_TAG:-latest}
     restart: unless-stopped
     env_file:
-      - .env.production
+      - .env
     ports:
       - "${APP_PORT:-3000}:3000"
     depends_on:
@@ -20,28 +18,52 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ai_research
-    command: ["--replSet", "rs0", "--bind_ip_all"]
+    command: ["--replSet", "rs0", "--bind_ip_all", "--keyFile", "/data/replica.key"]
     volumes:
       - mongodata:/data/db
+      - mongokey:/data
     networks:
       - webnet
 
-  # 初始化 replica set（只会在第一次运行时生效）
+  # 生成 replica set keyFile（只需运行一次）
+  mongo-keyfile:
+    image: mongo:7
+    restart: "no"
+    volumes:
+      - mongokey:/data
+    entrypoint: >
+      bash -c '
+        if [ ! -f /data/replica.key ]; then
+          openssl rand -base64 756 > /data/replica.key
+          chmod 400 /data/replica.key
+          chown 999:999 /data/replica.key
+        fi
+      '
+
+  # 初始化 replica set（等 keyFile 和 mongodb 都就绪后执行）
   mongo-init:
     image: mongo:7
     depends_on:
       - mongodb
+      - mongo-keyfile
     restart: "no"
     networks:
       - webnet
     entrypoint: >
-      mongosh --host mongodb:27017 --eval '\
-        try { rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "mongodb:27017" }] }) }\
-        catch(e) { if (e.codeName !== "AlreadyInitialized") throw e }\
+      bash -c '
+        sleep 5
+        mongosh --host mongodb:27017 -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin --eval "
+          try { rs.initiate({ _id: \"rs0\", members: [{ _id: 0, host: \"mongodb:27017\" }] }) }
+          catch(e) { if (e.codeName !== \"AlreadyInitialized\") throw e }
+        "
       '
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
 volumes:
   mongodata:
+  mongokey:
 
 networks:
   webnet:

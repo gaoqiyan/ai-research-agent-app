@@ -10,6 +10,7 @@ import {
   createConversation,
   removeConversation,
 } from "@/utils/api";
+import { generateId } from "@/utils/id";
 
 export default function Home() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -28,7 +29,7 @@ export default function Home() {
 
   const handleNewConversation = async () => {
     const conv: Conversation = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       messages: [],
       status: "idle",
       createdAt: Date.now(),

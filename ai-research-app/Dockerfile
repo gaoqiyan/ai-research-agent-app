@@ -1,6 +1,6 @@
 # ============================================================================
 # Dockerfile - Next.js 多阶段构建（用于 Docker Compose）
-# 
+#
 # 优化目标：
 # - 最小化镜像大小（~150MB vs ~500MB）
 # - 利用多层缓存提高构建速度
@@ -8,26 +8,7 @@
 # ============================================================================
 
 # ============================================================================
-# 第一阶段：依赖安装（deps）
-# ============================================================================
-FROM node:20-alpine AS deps
-
-WORKDIR /app
-
-# 安装 pnpm
-RUN npm install -g pnpm@latest
-
-# 复制 package 文件
-COPY package.json pnpm-lock.yaml ./
-
-# 安装依赖
-# 注意：Alpine 上 bcrypt 需要编译工具
-RUN apk add --no-cache python3 make g++ && \
-    pnpm install --frozen-lockfile && \
-    apk del python3 make g++
-
-# ============================================================================
-# 第二阶段：构建（builder）
+# 第一阶段：构建（builder）
 # ============================================================================
 FROM node:20-alpine AS builder
 
@@ -36,8 +17,9 @@ WORKDIR /app
 # 安装 pnpm
 RUN npm install -g pnpm@latest
 
-# 复制依赖（从 deps 阶段）
-COPY --from=deps /app/node_modules ./node_modules
+# 复制 package 文件并安装依赖
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # 复制源代码
 COPY . .
